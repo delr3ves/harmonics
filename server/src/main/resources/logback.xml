@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="true" scan="false">
+    <property name="LOG_PATTERN" value="%d [%thread] %-5level %logger{35} - %msg %n" />
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+            <charset>utf8</charset>
+        </encoder>
+    </appender>
+
+    <root level="info">
+        <appender-ref ref="CONSOLE" />
+    </root>
+
+    <if condition='p("CR_ENV").equals("production") || p("CR_ENV").equals("staging")'>
+        <then>
+            <appender name="ROLLBAR" class="com.tapstream.rollbar.RollbarAppender">
+                <apiKey>${CR_ROLLBAR_API_KEY}</apiKey>
+                <environment>${CR_ENV}</environment>
+                <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+                    <level>WARN</level>
+                </filter>
+            </appender>
+            <root level="info">
+                <appender-ref ref="CONSOLE" />
+                <appender-ref ref="ROLLBAR" />
+            </root>
+        </then>
+    </if>
+</configuration>
