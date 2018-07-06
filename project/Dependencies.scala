@@ -3,6 +3,7 @@ import sbt._
 object Dependencies {
 
   object Versions {
+    val FinatraVersion = "18.6.0"
     val LogbackVersion = "1.3.0-alpha4"
   }
 
